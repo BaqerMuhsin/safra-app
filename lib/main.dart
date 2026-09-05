@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 import 'app/routes/app_pages.dart';
+import 'core/theme/app_theme.dart';
 
 void main() {
   runApp(const App());
@@ -13,8 +15,17 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'app_temp',
+      title: 'Safra',
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.theme,
+      locale: const Locale('ar'),
+      fallbackLocale: const Locale('ar'),
+      supportedLocales: const [Locale('ar')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
     );

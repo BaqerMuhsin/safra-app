@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../home_tab.dart';
 import '../providers/home_provider.dart';
 
 class HomeController extends GetxController {
@@ -7,9 +8,11 @@ class HomeController extends GetxController {
 
   final HomeProvider _provider;
 
+  final RxInt currentTabIndex = 0.obs;
   final RxBool isLoading = true.obs;
   final RxString welcomeMessage = ''.obs;
-  final RxInt counter = 0.obs;
+
+  HomeTab get currentTab => HomeTab.fromIndex(currentTabIndex.value);
 
   @override
   void onInit() {
@@ -23,5 +26,9 @@ class HomeController extends GetxController {
     isLoading.value = false;
   }
 
-  void incrementCounter() => counter.value++;
+  void selectTab(int index) {
+    if (index == currentTabIndex.value) return;
+    if (index < 0 || index >= HomeTab.count) return;
+    currentTabIndex.value = index;
+  }
 }
