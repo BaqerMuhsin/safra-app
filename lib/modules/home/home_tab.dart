@@ -3,10 +3,10 @@ import 'package:hugeicons/styles/stroke_rounded.dart';
 enum HomeTab {
   home(icon: HugeIconsStrokeRounded.home01, label: 'الرئيسية', pillWidth: 120),
   trips(icon: HugeIconsStrokeRounded.ticket01, label: 'رحلاتي', pillWidth: 108),
-  support(
-    icon: HugeIconsStrokeRounded.customerSupport,
-    label: 'الدعم',
-    pillWidth: 96,
+  companies(
+    icon: HugeIconsStrokeRounded.building03,
+    label: 'الشركات',
+    pillWidth: 110,
   ),
   more(icon: HugeIconsStrokeRounded.settings01, label: 'المزيد', pillWidth: 96);
 

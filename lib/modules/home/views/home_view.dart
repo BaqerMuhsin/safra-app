@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/custom_scaffold.dart';
 import '../controllers/home_controller.dart';
+import 'tabs/companies_tab_view.dart';
 import 'tabs/home_tab_view.dart';
 import 'tabs/more_tab_view.dart';
-import 'tabs/support_tab_view.dart';
 import 'tabs/trips_tab_view.dart';
 import 'widgets/home_bottom_nav.dart';
 import 'widgets/home_header.dart';
@@ -45,7 +45,7 @@ class HomeView extends GetView<HomeController> {
                     children: const [
                       HomeTabView(),
                       TripsTabView(),
-                      SupportTabView(),
+                      CompaniesTabView(),
                       MoreTabView(),
                     ],
                   ),
