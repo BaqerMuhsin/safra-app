@@ -11,8 +11,52 @@ class HomeController extends GetxController {
   final RxInt currentTabIndex = 0.obs;
   final RxBool isLoading = true.obs;
   final RxString welcomeMessage = ''.obs;
+  final RxDouble scrollOffset = 0.0.obs;
+
+  static const headerRowHeight = 58.0;
+  static const headerTopPadding = 10.0;
+  static const headerBottomPadding = 18.0;
+  static const headerCollapseRange = 56.0;
+
+  static const _titles = ['أهلاً !', 'مرحباً بك!', 'يلا نسافر!'];
+  static const _subtitles = [
+    'وين تبي تسافر اليوم؟',
+    'اكتشف أجمل الرحلات السياحية',
+    'سافر بأمان مع سفره',
+    'رحلات سياحية داخل العراق',
+  ];
 
   HomeTab get currentTab => HomeTab.fromIndex(currentTabIndex.value);
+
+  /// 0 = fully expanded, 1 = modestly collapsed.
+  double get headerCollapse =>
+      (scrollOffset.value / headerCollapseRange).clamp(0.0, 1.0);
+
+  String get greetingTitle {
+    final args = Get.arguments;
+    if (args is String && args.isNotEmpty) {
+      return 'مرحباً !';
+    }
+    return _titles[DateTime.now().day % _titles.length];
+  }
+
+  String get greetingSubtitle {
+    return _subtitles[DateTime.now().day % _subtitles.length];
+  }
+
+  String get avatarInitial {
+    final args = Get.arguments;
+    if (args is String && args.trim().isNotEmpty) {
+      return 'س';
+    }
+    return 'س';
+  }
+
+  void onScrollOffset(double offset) {
+    final next = offset < 0 ? 0.0 : offset;
+    if ((scrollOffset.value - next).abs() < 0.5) return;
+    scrollOffset.value = next;
+  }
 
   @override
   void onInit() {
@@ -30,5 +74,6 @@ class HomeController extends GetxController {
     if (index == currentTabIndex.value) return;
     if (index < 0 || index >= HomeTab.count) return;
     currentTabIndex.value = index;
+    scrollOffset.value = 0;
   }
 }

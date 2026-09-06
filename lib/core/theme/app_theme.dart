@@ -8,6 +8,7 @@ class AppTheme {
   static const Color primaryDark = Color(0xFF005A8C);
   static const Color primarySoft = Color(0xFF1A8FC4);
   static const Color primaryLight = Color(0xFFE8F4FA);
+  static const Color headerGlow = Color(0xFF7EB8D9);
   static const Color secondary = Color(0xFFFF6B6B);
   static const Color background = Color(0xFFF6F6F6);
   static const Color surface = Color(0xFFFFFFFF);
@@ -16,6 +17,7 @@ class AppTheme {
   static const Color textSecondary = Color(0xFF757575);
   static const Color textHint = Color(0xFFB8BCC6);
   static const Color border = Color(0xFFE6E6EA);
+  static const Color onPrimary = Color(0xFFFFFFFF);
 
   // Legacy aliases
   static const Color backgroundLight = background;
