@@ -1,7 +1,7 @@
 import 'package:hugeicons/styles/stroke_rounded.dart';
 
 enum HomeTab {
-  home(icon: HugeIconsStrokeRounded.home01, label: 'الرئيسية', pillWidth: 120),
+  home(icon: HugeIconsStrokeRounded.home01, label: 'الرئيسية', pillWidth: 121),
   trips(icon: HugeIconsStrokeRounded.ticket01, label: 'رحلاتي', pillWidth: 108),
   companies(
     icon: HugeIconsStrokeRounded.building03,
