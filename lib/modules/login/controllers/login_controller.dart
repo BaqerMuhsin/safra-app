@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../app/routes/app_routes.dart';
+import '../../../core/services/session_service.dart';
+import '../../../core/utils/app_feedback.dart';
 
 class LoginController extends GetxController {
   final phoneController = TextEditingController();
@@ -12,6 +16,10 @@ class LoginController extends GetxController {
   final RxBool isValidPhone = false.obs;
   final RxBool isValidOtp = false.obs;
   final RxnString errorMessage = RxnString();
+  final RxInt resendSeconds = 0.obs;
+
+  static const _resendDelay = 60;
+  Timer? _resendTimer;
 
   static final _iraqiMobilePattern = RegExp(r'^7[3-9]\d{8}$');
 
@@ -22,6 +30,7 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
+    _resendTimer?.cancel();
     phoneController.dispose();
     otpController.dispose();
     super.onClose();
@@ -47,6 +56,29 @@ class LoginController extends GetxController {
     isValidOtp.value = false;
     isOtpStep.value = true;
     isLoading.value = false;
+    _startResendCountdown();
+  }
+
+  void resendOtp() {
+    if (resendSeconds.value > 0 || isLoading.value) return;
+    otpController.clear();
+    isValidOtp.value = false;
+    errorMessage.value = null;
+    _startResendCountdown();
+    showAppSnack('تم إرسال رمز جديد');
+  }
+
+  void _startResendCountdown() {
+    _resendTimer?.cancel();
+    resendSeconds.value = _resendDelay;
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (resendSeconds.value <= 1) {
+        resendSeconds.value = 0;
+        timer.cancel();
+      } else {
+        resendSeconds.value--;
+      }
+    });
   }
 
   Future<void> submitOtp() async {
@@ -61,10 +93,12 @@ class LoginController extends GetxController {
     errorMessage.value = null;
     await Future<void>.delayed(const Duration(milliseconds: 600));
     isLoading.value = false;
-    Get.toNamed(AppRoutes.home, arguments: formattedPhone);
+    Get.find<SessionService>().signIn(formattedPhone);
+    Get.offAllNamed(AppRoutes.home);
   }
 
   void backToPhoneStep() {
+    _resendTimer?.cancel();
     isOtpStep.value = false;
     otpController.clear();
     isValidOtp.value = false;

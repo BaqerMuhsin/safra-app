@@ -227,7 +227,7 @@ class _TripImage extends StatelessWidget {
             Image.network(
               imageUrl!,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => const _ImagePlaceholder(),
+              errorBuilder: (_, _, _) => const _ImagePlaceholder(),
               loadingBuilder: (context, child, progress) {
                 if (progress == null) return child;
                 return const _ImagePlaceholder();
@@ -256,8 +256,9 @@ class _TripImage extends StatelessWidget {
               child: _Chip(
                 label: statusLabel!,
                 foreground: Colors.white,
-                background: (statusColor ?? AppTheme.primary)
-                    .withValues(alpha: 0.92),
+                background: (statusColor ?? AppTheme.primary).withValues(
+                  alpha: 0.92,
+                ),
               ),
             ),
           if (ratingLabel != null && ratingLabel!.isNotEmpty)
@@ -323,10 +324,7 @@ class _Chip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (leading != null) ...[
-            leading!,
-            const SizedBox(width: 4),
-          ],
+          if (leading != null) ...[leading!, const SizedBox(width: 4)],
           Text(
             label,
             style: TextStyle(

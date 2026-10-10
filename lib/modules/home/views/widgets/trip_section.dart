@@ -4,16 +4,7 @@ import '../../../../core/theme/app_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_page_header.dart';
 import '../../../../core/widgets/trip_card.dart';
-
-typedef TripSample = ({
-  String title,
-  String location,
-  String duration,
-  String date,
-  String price,
-  String rating,
-  String image,
-});
+import '../../../../data/models/trip.dart';
 
 /// Horizontal trip carousel with section title + optional "عرض الكل".
 class TripSection extends StatelessWidget {
@@ -23,13 +14,15 @@ class TripSection extends StatelessWidget {
     required this.trips,
     this.subtitle,
     this.onSeeAll,
+    this.onTripTap,
     this.cardWidth = 268,
   });
 
   final String title;
   final String? subtitle;
-  final List<TripSample> trips;
+  final List<Trip> trips;
   final VoidCallback? onSeeAll;
+  final ValueChanged<Trip>? onTripTap;
   final double cardWidth;
 
   static const double _listHeight = 262;
@@ -51,10 +44,7 @@ class TripSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    Text(title, style: Theme.of(context).textTheme.titleMedium),
                     if (subtitle != null && subtitle!.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
@@ -99,7 +89,7 @@ class TripSection extends StatelessWidget {
               horizontal: AppPageHeader.pagePadding,
             ),
             itemCount: trips.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final trip = trips[index];
               return Align(
@@ -109,12 +99,12 @@ class TripSection extends StatelessWidget {
                   imageHeight: 118,
                   title: trip.title,
                   location: trip.location,
-                  durationLabel: trip.duration,
-                  dateLabel: trip.date,
-                  priceLabel: trip.price,
+                  durationLabel: trip.durationLabel,
+                  dateLabel: trip.dateLabel,
+                  priceLabel: trip.priceLabel,
                   ratingLabel: trip.rating,
-                  imageUrl: trip.image,
-                  onTap: () {},
+                  imageUrl: trip.imageUrl,
+                  onTap: onTripTap == null ? null : () => onTripTap!(trip),
                 ),
               );
             },

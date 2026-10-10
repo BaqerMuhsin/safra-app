@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/styles/stroke_rounded.dart';
 
+import '../../../app/routes/app_routes.dart';
 import '../../../core/theme/app_fonts.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_huge_icon.dart';
@@ -52,7 +53,7 @@ class LoginView extends GetView<LoginController> {
                   const SizedBox(height: 8),
                   Text(
                     isOtp
-                        ? 'تم إرسال رمز التحقق إلى واتساب ورسالة نصية على ${controller.formattedPhone}'
+                        ? 'تم إرسال رمز التحقق إلى واتساب ورسالة نصية على \u2066${controller.formattedPhone}\u2069'
                         : 'قم بتسجيل الدخول لإكمال حجزك وإدارة رحلاتك والحصول على دعم مباشر!',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
@@ -64,14 +65,26 @@ class LoginView extends GetView<LoginController> {
                   ] else ...[
                     _buildOtpField(context),
                     const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : controller.backToPhoneStep,
-                        child: const Text('تغيير رقم الهاتف'),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : controller.backToPhoneStep,
+                          child: const Text('تغيير رقم الهاتف'),
+                        ),
+                        TextButton(
+                          onPressed: controller.resendSeconds.value > 0
+                              ? null
+                              : controller.resendOtp,
+                          child: Text(
+                            controller.resendSeconds.value > 0
+                                ? 'إعادة الإرسال (${controller.resendSeconds.value})'
+                                : 'إعادة إرسال الرمز',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                   if (controller.errorMessage.value != null) ...[
@@ -139,7 +152,10 @@ class LoginView extends GetView<LoginController> {
             size: 18,
           ),
         ),
-        prefixIconConstraints: const BoxConstraints(minWidth: 40, minHeight: 24),
+        prefixIconConstraints: const BoxConstraints(
+          minWidth: 40,
+          minHeight: 24,
+        ),
       ),
     );
   }
@@ -171,20 +187,31 @@ class LoginView extends GetView<LoginController> {
   }
 
   Widget _buildTermsRow(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AppHugeIcon(
-          icon: HugeIconsStrokeRounded.informationCircle,
-          size: 16,
-          color: AppTheme.textSecondary,
+    return InkWell(
+      onTap: () => Get.toNamed(AppRoutes.terms),
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AppHugeIcon(
+              icon: HugeIconsStrokeRounded.informationCircle,
+              size: 16,
+              color: AppTheme.textSecondary,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              'اطلع على شروط وأحكام سفره',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontSize: 13,
+                color: AppTheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 6),
-        Text(
-          'اطلع على شروط وأحكام سفره',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13),
-        ),
-      ],
+      ),
     );
   }
 
@@ -199,8 +226,8 @@ class LoginView extends GetView<LoginController> {
       onPressed: loading
           ? null
           : enabled
-              ? (isOtp ? controller.submitOtp : controller.submitPhone)
-              : null,
+          ? (isOtp ? controller.submitOtp : controller.submitPhone)
+          : null,
       style: FilledButton.styleFrom(
         backgroundColor: active ? AppTheme.primary : AppTheme.border,
         foregroundColor: active ? Colors.white : AppTheme.textHint,

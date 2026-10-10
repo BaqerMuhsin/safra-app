@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/styles/stroke_rounded.dart';
 
+import '../../../../app/routes/app_routes.dart';
 import '../../../../core/theme/app_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_circle_icon_button.dart';
@@ -84,8 +85,9 @@ class HomeHeader extends GetView<HomeController> {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppTheme.onPrimary
-                                        .withValues(alpha: 0.88),
+                                    color: AppTheme.onPrimary.withValues(
+                                      alpha: 0.88,
+                                    ),
                                     fontSize: 13,
                                     height: 1.35,
                                   ),
@@ -101,16 +103,36 @@ class HomeHeader extends GetView<HomeController> {
               ),
             ),
             const SizedBox(width: 8),
-            _GlassIconButton(
-              child: AppCircleIconButton(
-                icon: HugeIconsStrokeRounded.notification01,
-                size: iconSize,
-                iconSize: 22 - (2 * t),
-                backgroundColor: Colors.white.withValues(alpha: 0.18),
-                iconColor: AppTheme.onPrimary,
-                borderWidth: 0,
-                onPressed: () {},
-              ),
+            Stack(
+              children: [
+                _GlassIconButton(
+                  child: AppCircleIconButton(
+                    icon: HugeIconsStrokeRounded.notification01,
+                    size: iconSize,
+                    iconSize: 22 - (2 * t),
+                    backgroundColor: Colors.white.withValues(alpha: 0.18),
+                    iconColor: AppTheme.onPrimary,
+                    borderWidth: 0,
+                    onPressed: () => Get.toNamed(AppRoutes.notifications),
+                  ),
+                ),
+                if (controller.hasUnreadNotifications)
+                  PositionedDirectional(
+                    top: 2,
+                    end: 2,
+                    child: IgnorePointer(
+                      child: Container(
+                        width: 11,
+                        height: 11,
+                        decoration: BoxDecoration(
+                          color: AppTheme.secondary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1.5),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ],
         ),

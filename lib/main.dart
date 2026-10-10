@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
+import 'app/bindings/app_binding.dart';
 import 'app/routes/app_pages.dart';
 import 'core/theme/app_theme.dart';
 
@@ -26,6 +27,7 @@ class App extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      initialBinding: AppBinding(),
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
     );

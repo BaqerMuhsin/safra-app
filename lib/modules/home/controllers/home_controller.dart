@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../../../core/services/notifications_service.dart';
+import '../../../core/services/session_service.dart';
 import '../home_tab.dart';
 import '../providers/home_provider.dart';
 
@@ -7,6 +9,8 @@ class HomeController extends GetxController {
   HomeController({required HomeProvider provider}) : _provider = provider;
 
   final HomeProvider _provider;
+  final SessionService _session = Get.find();
+  final NotificationsService _notifications = Get.find();
 
   final RxInt currentTabIndex = 0.obs;
   final RxBool isLoading = true.obs;
@@ -33,9 +37,8 @@ class HomeController extends GetxController {
       (scrollOffset.value / headerCollapseRange).clamp(0.0, 1.0);
 
   String get greetingTitle {
-    final args = Get.arguments;
-    if (args is String && args.isNotEmpty) {
-      return 'مرحباً !';
+    if (_session.name.value.trim().isNotEmpty) {
+      return 'أهلاً، ${_session.firstName}!';
     }
     return _titles[DateTime.now().day % _titles.length];
   }
@@ -44,13 +47,10 @@ class HomeController extends GetxController {
     return _subtitles[DateTime.now().day % _subtitles.length];
   }
 
-  String get avatarInitial {
-    final args = Get.arguments;
-    if (args is String && args.trim().isNotEmpty) {
-      return 'س';
-    }
-    return 'س';
-  }
+  String get avatarInitial =>
+      _session.name.value.trim().isEmpty ? 'س' : _session.initial;
+
+  bool get hasUnreadNotifications => _notifications.unreadCount > 0;
 
   void onScrollOffset(double offset) {
     final next = offset < 0 ? 0.0 : offset;

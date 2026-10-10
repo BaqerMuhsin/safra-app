@@ -194,7 +194,7 @@ class _Logo extends StatelessWidget {
           ? Image.network(
               imageUrl!,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => _Initials(name: name),
+              errorBuilder: (_, _, _) => _Initials(name: name),
               loadingBuilder: (context, child, progress) {
                 if (progress == null) return child;
                 return _Initials(name: name);

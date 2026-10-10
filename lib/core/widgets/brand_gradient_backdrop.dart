@@ -163,8 +163,16 @@ class _FloatingBrandOrbState extends State<_FloatingBrandOrb>
             child: child,
           );
         },
-     
-          
+        child: IgnorePointer(
+          child: Container(
+            width: widget.size,
+            height: widget.size,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: widget.opacity),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -234,10 +242,7 @@ class _FloatingTravelIconState extends State<_FloatingTravelIcon>
               math.cos(t) * widget.driftX,
               math.sin(t) * widget.driftY,
             ),
-            child: Transform.rotate(
-              angle: math.sin(t) * 0.08,
-              child: child,
-            ),
+            child: Transform.rotate(angle: math.sin(t) * 0.08, child: child),
           );
         },
         child: IgnorePointer(
